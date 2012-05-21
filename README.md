@@ -49,13 +49,13 @@ push your changes to git?  I have.
 Have cap make sure you're committed and pushed before deploying by adding to
 your recipe in deploy.rb: 
 
-    before "deploy", "git:guard_committed", "git:guard_pushed"
+    before "deploy", "git:guard_committed", "git:guard_upstream"
     
 Or use just one or the other
 
 * `guard_committed` makes sure you have no uncommitted changes. _IF_ you have a :branch set
    in your cap recipe, it will also make sure your curent checkout matches that branch. 
-* `guard_pushed` makes sure the current working copy branch (or local branch matching Cap
+* `guard_upstream` makes sure the current working copy branch (or local branch matching Cap
   :branch, if set) matches the upstream remote version. 
  
 ## Automatically tag on deploy
@@ -66,7 +66,7 @@ gets deployed, with a tag like "deploy-2012-04-11-1517"?
 Add this to your Cap recipe, usefully combining with the tasks to make sure
 your git copy is 'clean' as discussed above:
 
-    before "deploy", "git:guard_committed", "git:guard_pushed", "git:tag"
+    before "deploy", "git:guard_committed", "git:guard_upstream", "git:tag"
    
 That's a date and timestamp, deploy-yyyy-mm-dd-hhmm.
 
@@ -91,7 +91,7 @@ In one commonly desired multistage workflow (similar to what
  * Under staging, you want automatic tagging with staging-yyyy-mm-dd-hhmm, just 
    as above under 'Automatically tag on deploy'. Add to your `config/staging.rb`:
    
-           before "deploy", "git:guard_committed", "git:guard_pushed", "git:tag"
+           before "deploy", "git:guard_committed", "git:guard_upstream", "git:tag"
       
  * Under production, you want to take the most recent 'staging' tag, and promote
    it by deploying that tag to production, re-tagging with a "production-" tag.
