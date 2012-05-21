@@ -76,7 +76,7 @@ module CapGitTools::TaskHelpers
     end
     
     def tag_prefix
-      fetch(:tag_prefix, fetch(:stage, "deploy"))
+      fetch(:tag_prefix, fetch(:rails_env, "deploy"))
     end
     
     def from_prefix
