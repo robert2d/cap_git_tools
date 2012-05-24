@@ -146,6 +146,23 @@ module CapGitTools::TaskHelpers
       say_formatted command + "\n\n"
       system command
       puts "" # newline
+    end 
+    
+    def get_commit_log(from_tag, to_tag)
+      if fetch("github_browser_compare", false ) && `git config remote.#{upstream_remote}.url` =~ /git@github.com:(.*)\/(.*).git/      
+        # be awesome for github, use `open` in browser
+        command = "open https://github.com/#{$1}/#{$2}/compare/#{from_tag}...#{to_tag}"
+      elsif ENV['git_log_command'] && ENV['git_log_command'].strip != ''
+        # use custom compare command if set
+        command = "git #{ENV['git_log_command']} #{from_tag}..#{to_tag}"
+      else
+        # standard git log command
+        command = "git log --oneline --no-commit-id #{from_tag}..#{to_tag}"      
+      end
+      
+      say_formatted "Displaying commits from #{from_tag} to #{to_tag}\n\n"
+      say_formatted command + "\n\n"
+      output = `#{command}`
     end
       
     

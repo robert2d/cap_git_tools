@@ -291,6 +291,23 @@ Capistrano::Configuration.instance.load do
       end
       
       show_commit_log(from, to)
+    end 
+    
+    task :get_commits do
+       
+       from, to = nil, nil
+      
+      if exists?("stage") && stage.to_s == "production"
+        # production stage in multi-stage
+        from =  fetch_last_tag # last deploy-* tag, or last :tag_prefix tag
+        to = from_tag # last staging-* tag, or last :from_prefix tag
+      else
+        # 'staging' stage in multi-stage, or else any old
+        # non-multistage. 
+        from = fetch_last_tag # last deploy-* tag, or last :tag_prefix tag
+        to = local_sha.slice(0,8) # current git working copy, or local branch head. 
+      end
+      get_commit_log(from, to) 
     end
     
     
